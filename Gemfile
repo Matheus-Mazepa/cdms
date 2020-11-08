@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.1'
+ruby '~> 2.7'
 
 gem 'bootsnap', '>= 1.4.2', require: false
 gem 'pg', '>= 0.18', '< 2.0'
@@ -11,10 +11,14 @@ gem 'sass-rails', '>= 6'
 gem 'turbolinks', '~> 5'
 gem 'webpacker', '~> 4.0'
 
+gem 'active_link_to'
+gem 'activerecord-postgres_enum', git: 'https://github.com/dmarczal/activerecord-postgres_enum.git'
+gem 'breadcrumbs_on_rails'
 gem 'carrierwave', '~> 2.0'
 gem 'cpf_cnpj'
 gem 'devise'
 gem 'font-awesome-sass', '~> 5.13.0'
+gem 'kaminari'
 gem 'rails-i18n', '~> 6.0.0'
 gem 'simple_form'
 gem 'sprockets-rails', git: 'git://github.com/rails/sprockets-rails.git'
@@ -23,6 +27,7 @@ gem 'validators'
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot_rails'
+  gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
 
   gem 'guard'
   gem 'guard-minitest'

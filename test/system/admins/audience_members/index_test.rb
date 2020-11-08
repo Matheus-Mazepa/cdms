@@ -3,8 +3,8 @@ require 'application_system_test_case'
 class IndexTest < ApplicationSystemTestCase
   context 'audience_members' do
     setup do
-      admin = create(:admin)
-      login_as(admin, scope: :admin)
+      user = create(:user, :manager)
+      login_as(user, as: :user)
     end
 
     should 'list all' do
@@ -26,6 +26,21 @@ class IndexTest < ApplicationSystemTestCase
           assert_selector "#{base_selector} a[href='#{href}'][data-method='delete']"
         end
       end
+    end
+
+    should 'search' do
+      first_name = 'Eduardo'
+      second_name = 'Gustavo'
+
+      FactoryBot.create(:audience_member, name: first_name)
+      FactoryBot.create(:audience_member, name: second_name)
+
+      visit admins_audience_members_path
+
+      fill_in 'search', with: second_name
+      submit_form('button.submit-search')
+
+      assert_selector 'tr:nth-child(1) a', text: second_name
     end
 
     should 'display' do

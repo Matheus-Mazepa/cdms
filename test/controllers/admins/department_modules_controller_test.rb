@@ -5,17 +5,36 @@ class Admins::DepartmentModulesControllerTest < ActionDispatch::IntegrationTest
     setup do
       @module = create(:department_module)
       @department = @module.department
-      sign_in create(:admin)
+      @user = create(:user)
+      sign_in create(:user, :manager)
+    end
+
+    teardown do
+      assert_active_link(href: admins_departments_path)
     end
 
     should 'get new' do
       get new_admins_department_module_path(@department)
       assert_response :success
+
+      assert_breadcrumbs({ link: admins_root_path,        text: I18n.t('views.breadcrumbs.home') },
+                         { link: admins_departments_path, text: Department.model_name.human(count: 2) },
+                         { text: I18n.t('views.breadcrumbs.show', model: @department.model_name.human,
+                                                                  id: @department.id) },
+                         { text: I18n.t('views.breadcrumbs.new.m') })
     end
 
     should 'get edit' do
-      get edit_admins_department_path(@department, @module)
+      get edit_admins_department_module_path(@department, @module)
       assert_response :success
+
+      assert_breadcrumbs({ link: admins_root_path,        text: I18n.t('views.breadcrumbs.home') },
+                         { link: admins_departments_path, text: Department.model_name.human(count: 2) },
+                         { text: I18n.t('views.breadcrumbs.show', model: @department.model_name.human,
+                                                                  id: @department.id) },
+                         { text: I18n.t('views.breadcrumbs.show', model: @module.model_name.human,
+                                                                  id: @module.id) },
+                         { text: I18n.t('views.breadcrumbs.edit') })
     end
 
     context '#create' do
@@ -27,6 +46,7 @@ class Admins::DepartmentModulesControllerTest < ActionDispatch::IntegrationTest
         assert_redirected_to admins_department_path(@department)
         assert_equal I18n.t('flash.actions.create.m', resource_name: DepartmentModule.model_name.human),
                      flash[:success]
+        follow_redirect!
       end
 
       should 'unsuccessfully' do
@@ -37,6 +57,13 @@ class Admins::DepartmentModulesControllerTest < ActionDispatch::IntegrationTest
 
         assert_response :success
         assert_equal I18n.t('flash.actions.errors'), flash[:error]
+
+        assert_breadcrumbs({ link: admins_root_path,        text: I18n.t('views.breadcrumbs.home') },
+                           { link: admins_departments_path, text: Department.model_name.human(count: 2) },
+                           { text: I18n.t('views.breadcrumbs.show', model: @department.model_name.human,
+                                                                    id: @department.id) },
+                           { link: new_admins_department_module_path(@department),
+                             text: I18n.t('views.breadcrumbs.new.m') })
       end
     end
 
@@ -48,6 +75,7 @@ class Admins::DepartmentModulesControllerTest < ActionDispatch::IntegrationTest
                      flash[:success]
         @module.reload
         assert_equal 'updated', @module.name
+        follow_redirect!
       end
 
       should 'unsuccessfully' do
@@ -58,6 +86,15 @@ class Admins::DepartmentModulesControllerTest < ActionDispatch::IntegrationTest
         name = @module.name
         @module.reload
         assert_equal name, @module.name
+
+        assert_breadcrumbs({ link: admins_root_path, text: I18n.t('views.breadcrumbs.home') },
+                           { link: admins_departments_path, text: Department.model_name.human(count: 2) },
+                           { text: I18n.t('views.breadcrumbs.show', model: @department.model_name.human,
+                                                                    id: @department.id) },
+                           { text: I18n.t('views.breadcrumbs.show', model: @module.model_name.human,
+                                                                    id: @module.id) },
+                           { link: edit_admins_department_module_path(@department, @module),
+                             text: I18n.t('views.breadcrumbs.edit') })
       end
     end
 
@@ -67,25 +104,39 @@ class Admins::DepartmentModulesControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_redirected_to admins_department_path(@department)
+      follow_redirect!
     end
   end
 
   context 'unauthenticated' do
-    should 'redirect to login' do
-      requests = {
-        get: [new_admins_department_module_path(1),
-              edit_admins_department_module_path(1, 1)],
-        post: [admins_department_modules_path(1)],
-        patch: [admins_department_module_path(1, 1)],
-        delete: [admins_department_module_path(1, 1)]
-      }
+    should 'redirect to login when not authenticated' do
+      assert_redirect_to(new_user_session_path)
+    end
 
-      requests.each do |method, routes|
-        routes.each do |route|
-          send(method, route)
-          assert_redirected_to new_admin_session_path
-        end
+    should 'redirect to login when logged as non administrator user' do
+      sign_in create(:user)
+      assert_redirect_to(users_root_path)
+    end
+  end
+
+  private
+
+  def assert_redirect_to(redirect_to)
+    requests.each do |method, routes|
+      routes.each do |route|
+        send(method, route)
+        assert_redirected_to redirect_to
       end
     end
+  end
+
+  def requests
+    {
+      get: [new_admins_department_module_path(1),
+            edit_admins_department_module_path(1, 1)],
+      post: [admins_department_modules_path(1)],
+      patch: [admins_department_module_path(1, 1)],
+      delete: [admins_department_module_path(1, 1)]
+    }
   end
 end

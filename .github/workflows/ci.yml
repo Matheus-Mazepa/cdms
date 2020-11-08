@@ -100,12 +100,14 @@ jobs:
   code_quality:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
-      - name: Setup Ruby 2.7.1
+      - name: Setup Ruby 2.7
         uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.7.1'
+          ruby-version: '2.7'
 
       - name: Copy application env file
         run: cp config/application.ci.yml config/application.yml
@@ -142,5 +144,5 @@ jobs:
         run: |
           yarn run lint
           bundle exec rubocop --parallel
-          bundle exec brakeman
+          bundle exec brakeman --ignore-config config/brakeman.ignore 
           bundle exec rubycritic --format console

@@ -1,9 +1,34 @@
 pt-BR:
+  enums:
+    roles:
+      responsible: Responsável
+      collaborator: Colaborador
+    categories:
+      declaration: Declaração
+      certification: Certificado
+  activemodel:
+    models:
+      administrator:
+        one: Administrador
+        other: Administradores
+      import_file:
+        one: Importar arquivo
+        other: Importar arquivos
+    attributes:
+      administrator:
+        role: Papel
+        role_id: Papel
+        user: Usuário
+      import_file:
+        file: Arquivo
   activerecord:
     models:
       admin:
         one: Administrador
         other: Administradores
+      document:
+        one: Certificado/Declaração
+        other: Certificados/Declarações
       department:
         one: Departamento
         other: Departamentos
@@ -22,13 +47,7 @@ pt-BR:
         email: Email
         created_at: Criado em
         updated_at: Atualizado em
-      admin:
-        password: Senha
-        current_password: Senha atual
-        password_confirmation: Confirmação de senha
-        remember_me: Lembre-me
-        reset_password_token: Token para recuperação de senha
-        <<: *commons
+        role: Papel
       department:
         name: Nome
         description: Descrição
@@ -37,6 +56,13 @@ pt-BR:
         phone: Telefone
         email: Email
         <<: *commons
+      document:
+        title: Título
+        front_text: Texto de frente
+        back_text: Texto de trás
+        category: Tipo
+        department: Departamento
+        department_id: Departamento
       department_module:
         name: Nome
         description: Descrição
@@ -46,7 +72,17 @@ pt-BR:
         register_number: Número do registro
         cpf: CPF
         active: Status
+        password: Senha
+        current_password: Senha atual
+        password_confirmation: Confirmação de senha
+        remember_me: Lembre-me
+        reset_password_token: Token para recuperação de senha
+        <<: *commons
+        <<: *commons
       audience_member:
         cpf: CPF
         id: Código
         <<: *commons
+      department_user:
+        role: Papel
+        user: Usuário
