@@ -2,6 +2,8 @@ class Admins::DepartmentsController < Admins::BaseController
   before_action :set_department, except: [:index, :new, :create]
   include Breadcrumbs
 
+  caches_action :index
+
   def index
     @departments = Department.search(params[:term]).page(params[:page])
   end
@@ -18,8 +20,8 @@ class Admins::DepartmentsController < Admins::BaseController
 
   def create
     @department = Department.new(department_params)
-
     if @department.save
+      expire_action :action => :index
       flash[:success] = I18n.t('flash.actions.create.m', resource_name: I18n.t('activerecord.models.department.one'))
       redirect_to admins_departments_path
     else
@@ -30,6 +32,8 @@ class Admins::DepartmentsController < Admins::BaseController
 
   def update
     if @department.update(department_params)
+      expire_action :action => :index
+      expire_fragment('render_departments')
       flash[:success] = I18n.t('flash.actions.update.m', resource_name: I18n.t('activerecord.models.department.one'))
       redirect_to admins_departments_path
     else

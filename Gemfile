@@ -27,7 +27,7 @@ gem 'validators'
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot_rails'
-  gem 'faker', git: 'https://github.com/faker-ruby/faker.git', branch: 'master'
+  gem 'faker'
 
   gem 'guard'
   gem 'guard-minitest'
@@ -47,6 +47,8 @@ group :development do
   gem 'rubocop-minitest', require: false
   gem 'rubocop-rails', require: false
   gem 'rubycritic', require: false
+  gem 'actionpack-action_caching'
+
 end
 
 group :test do

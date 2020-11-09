@@ -19,7 +19,6 @@ Rails.application.routes.draw do
       
       resources :departments, constraints: { id: /[0-9]+/ }, concerns: [:paginatable, :searchable_paginatable] do
         resources :department_modules, except: [:index, :show], as: :modules, path: 'modules'
-
         get '/members', to: 'departments#members', as: :members
         get '/non-members/search/(:term)', costraints: { term: %r{[^/]+} }, # allows anything except a slash.
                                            to: 'departments#non_members',
@@ -50,6 +49,7 @@ Rails.application.routes.draw do
       get 'audience_members/from-csv', to: 'audience_members#from_csv', as: :new_audience_members_from_csv
       post 'audience_members/from-csv', to: 'audience_members#create_from_csv', as: :create_audience_members_from_csv
 
+      get 'departments/page/:page', to: 'departments#index'
       resources :departments, constraints: { id: /[0-9]+/ }, concerns: [:paginatable, :searchable_paginatable] do
         resources :department_modules, except: [:index, :show], as: :modules, path: 'modules'
 

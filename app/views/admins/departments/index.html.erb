@@ -21,9 +21,11 @@
     </thead>
 
     <tbody>
-      <%= render @departments %>
+      <%# cache 'render_departments' do %>
+        <%= render @departments %>
+      <%#end%>
     </tbody>
   </table>
 
-  <%= paginate @departments %>
+  <%= paginate @departments%>
 </div>

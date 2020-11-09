@@ -15,14 +15,6 @@ GIT
       activerecord (>= 5, < 6.1)
       pg
 
-GIT
-  remote: https://github.com/faker-ruby/faker.git
-  revision: 9cd64307e30f3a94d443015087d28bb522762b5c
-  branch: master
-  specs:
-    faker (2.14.0)
-      i18n (>= 1.6, < 2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -50,6 +42,8 @@ GEM
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
+    actionpack-action_caching (1.2.1)
+      actionpack (>= 4.0.0)
     actiontext (6.0.3.2)
       actionpack (= 6.0.3.2)
       activerecord (= 6.0.3.2)
@@ -149,6 +143,8 @@ GEM
     factory_bot_rails (6.1.0)
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
+    faker (2.14.0)
+      i18n (>= 1.6, < 2)
     ffi (1.13.1)
     flay (2.12.1)
       erubis (~> 2.7.0)
@@ -396,6 +392,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionpack-action_caching
   active_link_to
   activerecord-postgres_enum!
   better_errors
@@ -410,7 +407,7 @@ DEPENDENCIES
   cpf_cnpj
   devise
   factory_bot_rails
-  faker!
+  faker
   font-awesome-sass (~> 5.13.0)
   guard
   guard-minitest
